@@ -1,33 +1,14 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+
 from PyQt5.QtWidgets import QMainWindow
-from ui.styles import apply_styles
 
-class Window(QMainWindow):
+class Style(QMainWindow):
     def __init__(self):
-        super(Window, self).__init__()
-        self.setWindowTitle("Аптека")
-        self.resize(800, 600)
-        self.setMaximumSize(QtCore.QSize(800, 600))
+        super().__init__()
+    
 
-        self.centralwidget = QtWidgets.QWidget(self)
-        self.setCentralWidget(self.centralwidget)
-
-        self.Title_txt = QtWidgets.QLabel(self.centralwidget)
-        self.login_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.login_place = QtWidgets.QTextEdit(self.centralwidget)
-        self.password_place = QtWidgets.QTextEdit(self.centralwidget)
-        self.Login_txt = QtWidgets.QLabel(self.centralwidget)
-        self.Password_txt = QtWidgets.QLabel(self.centralwidget)
-        self.Login_status = QtWidgets.QLabel(self.centralwidget)
-        self.title_font = QtGui.QFont()
-        self.login_font = self.password_font = QtGui.QFont()
-
-        self.setDefaultText()
-        self.objectname_settings()
-        self.geometry_settings()
-        self.font_settings()
-        apply_styles(self)
-
+    def apply_styles(self):
+        self.Title_txt.setStyleSheet("background-color: rgb(191, 191, 191); color: rgb(255, 255, 255);")
+        self.Title_txt.setMargin(10)
     def font_settings(self):
         self.title_font.setFamily("Arial")
         self.title_font.setPointSize(15)
