@@ -39,7 +39,10 @@ class AppLogin(QMainWindow):
         if username == "admin" and password == "1234":
             self.Login_status.setText("Успешный вход!")
             self.Login_status.setStyleSheet("color: green;")
+            self.password_place.clear()
             self.stacked_widget.setCurrentIndex(1) 
+            
+
             
             
         else:

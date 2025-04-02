@@ -9,6 +9,7 @@ class Style(QMainWindow):
     def apply_styles(self):
         self.Title_txt.setStyleSheet("background-color: rgb(191, 191, 191); color: rgb(255, 255, 255);")
         self.Title_txt.setMargin(10)
+        
     def font_settings(self):
         self.title_font.setFamily("Arial")
         self.title_font.setPointSize(15)
@@ -35,7 +36,7 @@ class Style(QMainWindow):
         self.password_place.setGeometry(80, 170, 190, 31)
         self.Login_txt.setGeometry(20, 140, 47, 13)
         self.Password_txt.setGeometry(20, 180, 47, 13)
-        self.Login_status.setGeometry(80, 210, 47, 13)
+        self.Login_status.setGeometry(80, 210, 85, 13)
 
     def objectname_settings(self):
         self.centralwidget.setObjectName("centralwidget")
