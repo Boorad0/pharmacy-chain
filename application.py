@@ -1,21 +1,19 @@
 
 import sys
-from PyQt5 import QtWidgets
+
 from PyQt5.QtWidgets import QApplication, QStackedWidget
 from Login.login import AppLogin
 from main.mainWindow import MainWindow
+from MySQL.connect_to_db import BD
 
-from PyQt5.QtWidgets import QMainWindow,QWidget
-class default(QMainWindow):
-    def __init__(self):
-        super().__init__()
 
 class App(QApplication):
     def __init__(self, sys_argv):
         super().__init__(sys_argv)
+        database= BD()
         self.stacked_widget = QStackedWidget()
-        self.auth_window = AppLogin(self.stacked_widget)
-        self.main_window = MainWindow(self.stacked_widget)
+        self.auth_window = AppLogin(self.stacked_widget, database)
+        self.main_window = MainWindow(self.stacked_widget,database)
         self.stacked_widget.addWidget(self.auth_window)
         self.stacked_widget.addWidget(self.main_window)
 

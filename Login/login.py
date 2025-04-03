@@ -1,9 +1,11 @@
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow,QWidget
 from Login.ui.style import Style
 class AppLogin(QMainWindow):
-    def __init__(self,stacked_widget):
+    def __init__(self,stacked_widget,database):
         super(AppLogin,self).__init__()
+        self.database = database
         self.stacked_widget = stacked_widget
         self.stacked_widget.setWindowTitle("Аптека")
         self.stacked_widget.resize(800, 600)
@@ -35,16 +37,11 @@ class AppLogin(QMainWindow):
     def login(self):
         username = self.login_place.toPlainText()
         password = self.password_place.toPlainText()
-
-        if username == "admin" and password == "1234":
-            self.Login_status.setText("Успешный вход!")
-            self.Login_status.setStyleSheet("color: green;")
+        self.database.authorization(username, password)
+        if self.database.status !=False:
             self.password_place.clear()
             self.stacked_widget.setCurrentIndex(1) 
-            
 
-            
-            
         else:
             self.Login_status.setText("Ошибка входа!")
             self.Login_status.setStyleSheet("color: red;")
