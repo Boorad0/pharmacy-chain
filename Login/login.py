@@ -1,33 +1,41 @@
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QMainWindow,QWidget
+from PyQt5.QtWidgets import QMainWindow,QWidget,QLineEdit
 from Login.ui.style import Style
+import time
 class AppLogin(QMainWindow):
     def __init__(self,stacked_widget,database):
         super(AppLogin,self).__init__()
         self.database = database
         self.stacked_widget = stacked_widget
         self.stacked_widget.setWindowTitle("Аптека")
-        self.stacked_widget.resize(800, 600)
-        self.stacked_widget.setMaximumSize(QtCore.QSize(800, 600))
+        self.stacked_widget.resize(960, 540)
+        self.stacked_widget.setMaximumSize(QtCore.QSize(960, 540))
+        self.stacked_widget.setMinimumSize(QtCore.QSize(280,385))
         self.centralwidget = QWidget(self)
+        self.centralwidget.setStyleSheet("\n"
+        "background-color: rgb(49, 49, 49);")
         self.setCentralWidget(self.centralwidget)
-        self.Title_txt = QtWidgets.QLabel(self.centralwidget)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label_LoginToSystem = QtWidgets.QLabel(self.centralwidget)
+        self.label_pharmacyChain = QtWidgets.QLabel(self.centralwidget)
+        self.login_place = QtWidgets.QLineEdit(self.centralwidget)
+        self.password_place = QtWidgets.QLineEdit(self.centralwidget)
+        self.label_login = QtWidgets.QLabel(self.centralwidget)
+        self.label_password = QtWidgets.QLabel(self.centralwidget)
         self.login_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.login_place = QtWidgets.QTextEdit(self.centralwidget)
-        self.password_place = QtWidgets.QTextEdit(self.centralwidget)
-        self.Login_txt = QtWidgets.QLabel(self.centralwidget)
-        self.Password_txt = QtWidgets.QLabel(self.centralwidget)
-        self.Login_status = QtWidgets.QLabel(self.centralwidget)
-        self.title_font = QtGui.QFont()
-        self.login_font = self.password_font = QtGui.QFont()
+        self.label_wrong_data = QtWidgets.QLabel(self.centralwidget)
+        Style.label_set(self)
+        Style.label_wrong_data_set(self)
+        Style.label_LoginToSystem_set(self)
+        Style.label_pharmacyChain_set(self)
+        Style.login_place_set(self)
+        Style.password_place_set(self)
+        Style.login_btn_set(self)
+        Style.label_login_set(self)
+        Style.label_password_set(self)
+       
 
-        Style.setDefaultText(self)
-        Style.objectname_settings(self)
-        Style.geometry_settings(self)
-        Style.font_settings(self)
-        Style.apply_styles(self)
-        
         self.authorization()  
 
     
@@ -35,16 +43,16 @@ class AppLogin(QMainWindow):
         self.login_btn.clicked.connect(self.login)
 
     def login(self):
-        username = self.login_place.toPlainText()
-        password = self.password_place.toPlainText()
+        username = self.login_place.text()
+        password = self.password_place.text()
         self.database.authorization(username, password)
-        if self.database.status !=False:
+        if self.database.status:
             self.password_place.clear()
+            self.label_wrong_data.setText("")  
             self.stacked_widget.setCurrentIndex(1) 
 
         else:
-            self.Login_status.setText("Ошибка входа!")
-            self.Login_status.setStyleSheet("color: red;")
-    
+            self.label_wrong_data.setText("Неверный логин или пароль")  
+            self.password_place.clear()
     
     
