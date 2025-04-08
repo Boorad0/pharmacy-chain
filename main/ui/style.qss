@@ -1,0 +1,79 @@
+
+QWidget {
+    background-color: rgb(0, 0, 0);
+    max-height: 1080;
+    margin:0;
+    width: 290px;
+}
+
+
+QWidget#menu_widget {
+    background-color: rgb(255, 255, 255);
+    max-width: 290;
+    margin:0;
+    width: 290px;
+}
+QLabel#label_photo {
+    background-color: rgb(255, 255, 255);
+    margin-bottom:20px;
+    qproperty-alignment: AlignCenter;
+   
+    
+    
+}
+QLabel#label_username {
+    
+    font: 14pt "Arial";
+    color: rgb(0, 0, 0);
+    font-weight:700;
+    margin-bottom:20px
+}
+QLabel#label_username, QLabel#label_menu {
+    background-color: rgb(255, 255, 255);
+    font: 14pt "Arial";
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    margin-bottom: 20px;
+    qproperty-alignment: AlignCenter;
+}
+
+QLabel#label_line_1, QLabel#label_line_2 {
+    background-color: rgb(0, 0, 0);
+    max-height: 3px;
+    min-height: 3px;
+    width: 290px;
+}
+
+QLabel#label_line_1 {
+    margin-bottom: 20px;
+}
+
+QLabel#label_line_2 {
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+QLabel#label_menu{
+    font: 14pt "Arial";
+    color: rgb(0, 0, 0);
+    font-weight:bold;
+    margin-bottom:20px;
+    qproperty-alignment: AlignCenter;
+}
+
+QPushButton {
+    background-color: rgb(54, 54, 54);
+    border-radius: 5px;
+    font: 9pt "Arial";
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    margin: 5px auto 10px auto; /* центрирование */
+    max-width: 200px;
+}
+
+QPushButton:hover {
+    background-color: #34495e;
+}
+
+QPushButton:pressed {
+    background-color: #1abc9c;
+}

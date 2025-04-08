@@ -46,10 +46,15 @@ class AppLogin(QMainWindow):
         username = self.login_place.text()
         password = self.password_place.text()
         self.database.authorization(username, password)
-        if self.database.status:
+        if not self.database.status:
             self.password_place.clear()
             self.label_wrong_data.setText("")  
+            self.stacked_widget.resize(1440, 810)
             self.stacked_widget.setCurrentIndex(1) 
+            self.stacked_widget.setMinimumSize(1440,810)
+            self.stacked_widget.setMaximumSize(1920,1080)
+            self.stacked_widget.setGeometry(10,40,0,0)
+            self.stacked_widget.showFullScreen
 
         else:
             self.label_wrong_data.setText("Неверный логин или пароль")  

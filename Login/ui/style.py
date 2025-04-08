@@ -98,12 +98,12 @@ class Style(QMainWindow):
         self.login_btn.setStyleSheet("""
     QPushButton {
         color: white;
-        background-color: #000000;  /* обычный черный */
+        background-color: #000000; 
         border: none;
         
     }
     QPushButton:hover {
-        background-color: #1a1a1a;  /* ярко-черный / глубокий черный */
+        background-color: #1a1a1a; 
     }
 """)
         

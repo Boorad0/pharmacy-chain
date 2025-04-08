@@ -16,7 +16,9 @@ class App(QApplication):
         self.stacked_widget.addWidget(self.auth_window)
         self.stacked_widget.addWidget(self.main_window)
         self.stacked_widget.setCurrentIndex(0)  # Начинаем с окна авторизации
+        
         self.stacked_widget.show()
+        
 
        
     
