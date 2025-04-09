@@ -2,12 +2,12 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget
-
+from main.products.product_page import Product_page
 class MainWindow(QWidget):
     def __init__(self, stacked_widget, database):
         super().__init__()
         self.stacked_widget = stacked_widget
-        
+        self.database = database
         with open("main/ui/style.qss", "r") as file:
             self.setStyleSheet(file.read())
         self.setWindowTitle("Меню")
@@ -37,16 +37,18 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.menu_widget)
 
         self.stack = QStackedWidget()
-        self.page = QWidget()
+        self.clear_page=QWidget()
+        self.page = Product_page(self.database)
         self.page.setContentsMargins(0,0,0,0)
         self.stack.setContentsMargins(0,0,0,0)
+        self.stack.addWidget(self.clear_page)
         self.stack.addWidget(self.page)
         self.main_layout.addWidget(self.stack)
 
     def create_menu_objects(self):
         self.main_layout = QHBoxLayout(self)
-        self.menu_layout = QVBoxLayout(self)
-        self.menu_widget = QWidget(self)
+        self.menu_layout = QVBoxLayout()
+        self.menu_widget = QWidget()
         self.label_photo = QLabel()
         self.label_username = QLabel()
         self.label_line_1 = QLabel()
@@ -72,6 +74,9 @@ class MainWindow(QWidget):
         print(f"Нажата кнопка: {button}") 
         if button.text() == "Выход":
             self.button_exit()
+        if button.text() == "Товары":
+            self.stack.setCurrentIndex(1)
+            
         
     def button_exit(self):
         self.stacked_widget.setMinimumSize(QtCore.QSize(280,385))

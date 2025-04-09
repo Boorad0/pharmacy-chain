@@ -45,8 +45,11 @@ class AppLogin(QMainWindow):
     def login(self):
         username = self.login_place.text()
         password = self.password_place.text()
-        self.database.authorization(username, password)
-        if not self.database.status:
+        self.database.login = username
+        self.database.password = password
+        self.database.authorization()
+        if self.database.status:
+            print(self.database)
             self.password_place.clear()
             self.label_wrong_data.setText("")  
             self.stacked_widget.resize(1440, 810)
