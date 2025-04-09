@@ -114,13 +114,6 @@ class Product_page(QWidget):
         row = item.row()
         col = item.column()
         new_value = item.text()
-
-        # Получаем значение ID из первого столбца (предполагается, что ID всегда в колонке 0)
-        id_item = self.table_product.item(row, 0)
-        if id_item:  # проверка на случай, если ячейка пустая
-            id_value = id_item.text()
-        else:
-            id_value = None
-
-        print(f"Изменено значение в строке {row + 1}, колонке {col + 1}: {new_value}")
-        print(f"ID измененной строки: {id_value}")
+        id_value = self.table_product.item(row, 0).text()
+        self.database.update_column_by_id(product_id=id_value, column_id=col, new_value=new_value)
+        

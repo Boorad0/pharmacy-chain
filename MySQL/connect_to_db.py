@@ -3,6 +3,7 @@ from mysql.connector import connect, Error
 from datetime import date
 class BD:
     def __init__(self,login=None,password=None):
+        self.column_names = ["id", "name", "manufacturer", "expiration_date", "quantity"]
         self.status = False
         self.login = login
         self.password = password
@@ -32,7 +33,25 @@ class BD:
         return rows
     
     
+    def update_column_by_id(self, product_id, column_id, new_value):
+        """
+        Обновляет значение указанной колонки по ID товара.
+        :param product_id: ID товара
+        :param column_name: имя колонки, которую нужно изменить ('name', 'manufacturer', 'expiration_date', 'quantity')
+        :param new_value: новое значение для указанной колонки
+        """
+        try:
+            self.cursor.execute("USE pharmacy_chain")
 
+            # Проверка, существует ли товар с таким ID
+            self.cursor.execute("SELECT * FROM product_table WHERE id = %s", (product_id,))
+            self.cursor.fetchone()
+            query = f"UPDATE product_table SET {self.column_names[column_id]} = %s WHERE id = %s"
+            self.cursor.execute(query, (new_value, product_id))
+            self.DataBase.commit()
+
+        except Error as e:
+            print(f"Ошибка при обновлении данных: {e}")
     def add_product(self, name, manufacturer, expiration_date, quantity):
         """
         Добавляет новый продукт в таблицу product_table.
@@ -52,15 +71,7 @@ class BD:
             print("Товар успешно добавлен.")
         except Error as e:
             print(f"Ошибка при добавлении товара: {e}")
-    def print_product_row(self, row):
-        """
-        Удобный вывод строки из таблицы product_table.
-        :param row: кортеж из SELECT-запроса (id, name, manufacturer, expiration_date, quantity)
-        """
-        id_, name_, manuf_, exp_date, qty = row
-        if isinstance(exp_date, date):
-            exp_date = exp_date.strftime("%Y-%m-%d")
-        print(f"ID: {id_}, Название: {name_}, Производитель: {manuf_}, Срок годности: {exp_date}, Кол-во: {qty}")
+    
 
     def search_products(self, name=None, quantity=None, manufacturer=None, expiration_date=None):
         try:
@@ -96,23 +107,7 @@ class BD:
 
         except Error as e:
             print(f"Ошибка при поиске: {e}")
-    def show_all_products(self):
-        """
-        Показывает все товары в таблице product_table.
-        """
-        try:
-            self.cursor.execute("USE pharmacy_chain")
-            self.cursor.execute("SELECT * FROM product_table")
-            results = self.cursor.fetchall()
-
-            if results:
-                print("Все товары в базе данных:")
-                for row in results:
-                    self.print_product_row(row)
-            else:
-                print("Таблица пуста.")
-        except Error as e:
-            print(f"Ошибка при получении данных: {e}")
+    
     def delete_product_by_id(self, product_id):
         """
         Удаляет товар по ID.
