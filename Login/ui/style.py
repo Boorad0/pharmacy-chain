@@ -1,4 +1,4 @@
-
+#кринге, надо переделать
 from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5 import QtWidgets, QtCore, QtGui
 class Style(QMainWindow):

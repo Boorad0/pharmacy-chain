@@ -68,9 +68,9 @@ class BD:
             """
             self.cursor.execute(insert_query, (name, manufacturer, expiration_date, quantity))
             self.DataBase.commit()
-            print("Товар успешно добавлен.")
+            return True
         except Error as e:
-            print(f"Ошибка при добавлении товара: {e}")
+            return False
     
 
     def search_products(self, name=None, quantity=None, manufacturer=None, expiration_date=None):
@@ -119,16 +119,8 @@ class BD:
             # Проверка, существует ли товар с таким ID
             self.cursor.execute("SELECT * FROM product_table WHERE id = %s", (product_id,))
             row = self.cursor.fetchone()
-            if row:
-                self.print_product_row(row)
-                confirm = input("Удалить этот товар? (y/n): ").strip().lower()
-                if confirm == 'y':
-                    self.cursor.execute("DELETE FROM product_table WHERE id = %s", (product_id,))
-                    self.DataBase.commit()
-                    print("Товар удалён.")
-                else:
-                    print("Удаление отменено.")
-            else:
-                print("Товар с таким ID не найден.")
+            self.cursor.execute("DELETE FROM product_table WHERE id = %s", (product_id,))
+            self.DataBase.commit()
+            
         except Error as e:
             print(f"Ошибка при удалении: {e}")

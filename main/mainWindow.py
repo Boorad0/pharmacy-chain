@@ -8,44 +8,41 @@ class MainWindow(QWidget):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.database = database
+        self.setWindowTitle("Меню")
+        self.__create_objects()
+        self.__add_object_name()
+        self.__add_object_text()
+        self.__add_to_page()
+        self.__add_styles()
+
+    def __add_styles(self):
         with open("main/ui/style.qss", "r") as file:
             self.setStyleSheet(file.read())
-        self.setWindowTitle("Меню")
         self.setContentsMargins(0,0,0,0)
-        btns = ["Товары", "Поставки", "Продажи","Потавщики","Сотрудники","Отчеты","UML Диаграмма","Администрирование"]
-        
-    
-        self.create_menu_objects()
-        self.set_object_name()
-        
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.menu_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
-        self.menu_widget.setLayout(self.menu_layout)
         self.pixmap = self.pixmap.scaled(50, 50)  
         self.label_photo.setPixmap(self.pixmap)
-        self.label_username.setText("Даниил")
-        self.label_menu.setText("Меню")
+        self.menu_layout.addStretch()
+        self.page.setContentsMargins(0,0,0,0)
+        self.stack.setContentsMargins(0,0,0,0)
+
+    def __add_to_page(self):
+        self.menu_widget.setLayout(self.menu_layout)
         self.menu_layout.addWidget(self.label_photo)
         self.menu_layout.addWidget(self.label_username)
         self.menu_layout.addWidget(self.label_line_1)
         self.menu_layout.addWidget(self.label_menu)
-        self.initialization(btns)
+        self.initialization(["Товары", "Поставки", "Продажи","Поставщики","Сотрудники","Отчеты","UML Диаграмма","Администрирование"])
         self.menu_layout.addWidget(self.label_line_2)
         self.initialization(["Выход"])
-        self.menu_layout.addStretch()
         self.main_layout.addWidget(self.menu_widget)
-
-        self.stack = QStackedWidget()
-        self.clear_page=QWidget()
-        self.page = Product_page(self.database)
-        self.page.setContentsMargins(0,0,0,0)
-        self.stack.setContentsMargins(0,0,0,0)
         self.stack.addWidget(self.clear_page)
         self.stack.addWidget(self.page)
         self.main_layout.addWidget(self.stack)
 
-    def create_menu_objects(self):
+    def __create_objects(self):
         self.main_layout = QHBoxLayout(self)
         self.menu_layout = QVBoxLayout()
         self.menu_widget = QWidget()
@@ -55,8 +52,11 @@ class MainWindow(QWidget):
         self.label_line_2 = QLabel()
         self.label_menu = QLabel()
         self.pixmap = QPixmap("photo/user-octagon-svgrepo-com.svg")
+        self.stack = QStackedWidget()
+        self.clear_page=QWidget()
+        self.page = Product_page(self.database)
 
-    def set_object_name(self):
+    def __add_object_name(self):
         self.menu_widget.setObjectName("menu_widget")
         self.label_photo.setObjectName("label_photo")
         self.label_username.setObjectName("label_username")
@@ -64,14 +64,20 @@ class MainWindow(QWidget):
         self.label_line_2.setObjectName("label_line_2")
         self.label_menu.setObjectName("label_menu")
 
+    def __add_object_text(self):
+        self.label_username.setText("Даниил")
+        self.label_menu.setText("Меню")
+
     def initialization(self, btns):
         for btn in btns:
-            button = MenuButton(btn)
+            button = QPushButton()
+            button.setText(btn)
             button.clicked.connect(self.button_clicked)  # Подключение сигнала нажатия кнопки
             self.menu_layout.addWidget(button)
+            
     def button_clicked(self):
         button = self.sender()  # Получаем кнопку, которая вызвала сигнал
-        print(f"Нажата кнопка: {button}") 
+        
         if button.text() == "Выход":
             self.button_exit()
         if button.text() == "Товары":
@@ -83,9 +89,5 @@ class MainWindow(QWidget):
         self.stacked_widget.setMaximumSize(QtCore.QSize(960, 540))
         self.stacked_widget.resize(960,540)
         self.stacked_widget.setCurrentIndex(0)
+        self.page.add_window.hide()
         
-        
-class MenuButton(QPushButton):
-    def __init__(self, text):
-        super().__init__(text)
-       
