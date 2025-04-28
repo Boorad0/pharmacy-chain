@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget
 from main.products.product_page import Product_page
+from main.sales.sales_page import SalesWindow
 class MainWindow(QWidget):
     def __init__(self, stacked_widget, database):
         super().__init__()
@@ -25,7 +26,7 @@ class MainWindow(QWidget):
         self.pixmap = self.pixmap.scaled(50, 50)  
         self.label_photo.setPixmap(self.pixmap)
         self.menu_layout.addStretch()
-        self.page.setContentsMargins(0,0,0,0)
+        self.product_page.setContentsMargins(0,0,0,0)
         self.stack.setContentsMargins(0,0,0,0)
 
     def __add_to_page(self):
@@ -39,7 +40,8 @@ class MainWindow(QWidget):
         self.initialization(["Выход"])
         self.main_layout.addWidget(self.menu_widget)
         self.stack.addWidget(self.clear_page)
-        self.stack.addWidget(self.page)
+        self.stack.addWidget(self.product_page)
+        self.stack.addWidget(self.sales_page)
         self.main_layout.addWidget(self.stack)
 
     def __create_objects(self):
@@ -54,7 +56,8 @@ class MainWindow(QWidget):
         self.pixmap = QPixmap("photo/user-octagon-svgrepo-com.svg")
         self.stack = QStackedWidget()
         self.clear_page=QWidget()
-        self.page = Product_page(self.database)
+        self.product_page = Product_page(self.database)
+        self.sales_page = SalesWindow(self.database)
 
     def __add_object_name(self):
         self.menu_widget.setObjectName("menu_widget")
@@ -82,6 +85,8 @@ class MainWindow(QWidget):
             self.button_exit()
         if button.text() == "Товары":
             self.stack.setCurrentIndex(1)
+        if button.text() == "Продажи":
+            self.stack.setCurrentIndex(2)
             
         
     def button_exit(self):
@@ -89,5 +94,5 @@ class MainWindow(QWidget):
         self.stacked_widget.setMaximumSize(QtCore.QSize(960, 540))
         self.stacked_widget.resize(960,540)
         self.stacked_widget.setCurrentIndex(0)
-        self.page.add_window.hide()
+        self.product_page.add_window.hide()
         

@@ -21,6 +21,7 @@ class Product_page(QWidget):
             self.setStyleSheet(file.read())
         self.table_product.setMinimumWidth(800)
         self.table_product.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.label_products.setAlignment(Qt.AlignCenter) 
 
     def __create_objects(self):
         self.product_layout = QVBoxLayout(self)
