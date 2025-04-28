@@ -13,8 +13,8 @@ class BD:
         try:
             DataBase=  connect(
             host="localhost",
-            user=self.login,
-            password=self.password,
+            user="boorado",#self.login=
+            password="12345678",#self.password=
             database="pharmacy_chain",
             auth_plugin='mysql_native_password'
             )
@@ -99,11 +99,10 @@ class BD:
             results = self.cursor.fetchall()
 
             if results:
-                print("Найденные товары:")
-                for row in results:
-                    self.print_product_row(row)
+                
+                return results
             else:
-                print("Совпадений не найдено.")
+                return []
 
         except Error as e:
             print(f"Ошибка при поиске: {e}")

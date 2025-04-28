@@ -26,6 +26,7 @@ class AppLogin(QMainWindow):
         
     def __set_styleSheet(self):
         self.stacked_widget.setWindowTitle("Аптека")
+        
         self.stacked_widget.resize(960, 540)
         self.stacked_widget.setMaximumSize(QtCore.QSize(960, 540))
         self.stacked_widget.setMinimumSize(QtCore.QSize(280,385))
@@ -51,7 +52,6 @@ class AppLogin(QMainWindow):
         self.database.password = password
         self.database.authorization()
         if self.database.status:
-            print(self.database)
             self.password_place.clear()
             self.label_wrong_data.setText("")  
             self.stacked_widget.resize(1440, 810)
@@ -59,7 +59,7 @@ class AppLogin(QMainWindow):
             self.stacked_widget.setMinimumSize(1440,810)
             self.stacked_widget.setMaximumSize(1920,1080)
             self.stacked_widget.setGeometry(10,40,0,0)
-            self.stacked_widget.showFullScreen
+            
 
         else:
             self.label_wrong_data.setText("Неверный логин или пароль")  

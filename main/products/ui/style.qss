@@ -5,5 +5,127 @@ QPushButton#btn_search {
     color: rgb(255, 255, 255);
     padding: 10px;
     margin: 5px auto 10px auto; /* центрирование */
-    max-width: 200px;
+    max-width: 150px;
+}
+/* Общие стили */
+QWidget {
+    background-color: #f0f0f0;
+    font-family: "Arial";
+    font-size: 14px;
+    color: #333333;
+}
+
+/* Заголовок */
+QLabel#label_products {
+    font-size: 24px;
+    background-color: rgb(222, 222, 222);
+    font-weight: bold;
+    margin: 5px auto 10px auto;
+    
+}
+
+/* Панель поиска и кнопок */
+QLineEdit#editline_search {
+    padding: 6px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    min-width: 100px;
+}
+
+QPushButton#btn_search,
+QPushButton#btn_update,
+QPushButton#btn_edit,
+QPushButton#btn_add,
+QPushButton#btn_delete,
+QPushButton {
+    background-color: #333333;
+    font: 9pt "Arial";
+    color: rgb(255, 255, 255);
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    max-width: 150px;
+}
+
+QPushButton#btn_search:hover,
+QPushButton#btn_update:hover,
+QPushButton#btn_edit:hover,
+QPushButton#btn_add:hover,
+QPushButton#btn_delete:hover {
+    background-color: #34495e;
+}
+
+QPushButton#btn_search:pressed,
+QPushButton#btn_update:pressed,
+QPushButton#btn_edit:pressed,
+QPushButton#btn_add:pressed,
+QPushButton#btn_delete:pressed {
+    background-color: #1abc9c;
+}
+
+/* Таблица товаров */
+QTableWidget#table_product {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    selection-color: black;
+    font-family: "Arial";
+    
+}
+
+QHeaderView::section {
+    background-color: #333333;
+    color: white;
+    padding: 5px;
+    border: none;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #333333;
+    border: none;
+}
+
+/* Окно добавления товара */
+QWidget#add_window {
+    background-color: #f9f9f9;
+}
+
+QLabel#add_window_label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+QLabel#add_window_error_label {
+    color: red;
+    font-size: 12px;
+}
+
+
+QScrollBar:vertical {
+    background: #f0f0f0;         /* Фон скроллбара */
+    width: 18px;                 /* Ширина полосы */
+    margin: 4px 4px 4px 4px;
+    border: none;
+}
+
+QScrollBar::handle:vertical {
+    background: #333333;          /* Цвет бегунка */
+    min-height: 20px;             /* Минимальная длина бегунка */
+    border-radius: 6px;           /* Скругление бегунка */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #555555;          /* Цвет бегунка при наведении */
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #222222;          /* Цвет бегунка при нажатии */
+}
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical {
+    height: 0px;
+    border: none;
+    background: none;
 }

@@ -8,7 +8,7 @@ class MainWindow(QWidget):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.database = database
-        self.setWindowTitle("Меню")
+        
         self.__create_objects()
         self.__add_object_name()
         self.__add_object_text()
@@ -34,7 +34,7 @@ class MainWindow(QWidget):
         self.menu_layout.addWidget(self.label_username)
         self.menu_layout.addWidget(self.label_line_1)
         self.menu_layout.addWidget(self.label_menu)
-        self.initialization(["Товары", "Поставки", "Продажи","Поставщики","Сотрудники","Отчеты","UML Диаграмма","Администрирование"])
+        self.initialization(["Товары", "Поставки", "Продажи","Поставщики","Сотрудники","Отчеты","Администрирование"])
         self.menu_layout.addWidget(self.label_line_2)
         self.initialization(["Выход"])
         self.main_layout.addWidget(self.menu_widget)

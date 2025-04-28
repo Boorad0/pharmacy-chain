@@ -2,7 +2,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget,QLineEdit, QComboBox, QTableWidget,QTableWidgetItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget,QLineEdit, QComboBox, QTableWidget,QTableWidgetItem,QHeaderView
 class Product_page(QWidget):
     def __init__(self, DateBase):
         super().__init__()
@@ -19,6 +19,8 @@ class Product_page(QWidget):
     def __set_styleSheet(self):
         with open("main/products/ui/style.qss", "r") as file:
             self.setStyleSheet(file.read())
+        self.table_product.setMinimumWidth(800)
+        self.table_product.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
     def __create_objects(self):
         self.product_layout = QVBoxLayout(self)
@@ -76,7 +78,22 @@ class Product_page(QWidget):
         self.btn_edit.clicked.connect(self.table_edit)
         self.btn_add.clicked.connect(self.table_add)
         self.add_window_button.clicked.connect(self.add_new_row)
+        self.btn_search.clicked.connect(self.search_item)
 
+    def search_item(self):
+        search_info = self.editline_search.text()
+        if search_info !="":
+            results = self.database.search_products(name=search_info)
+            self.table_product.setRowCount(len(results))
+            for row in range(len(results)):
+                for item in range(0,5):
+                    self.table_product.setItem(row,item, QTableWidgetItem(str(results[row][item])))
+            self.table_product.viewport().update()
+        
+        
+        
+        
+        
     def add_new_row(self):
         self.add_window_error_label.setText("")
         try:
@@ -167,12 +184,13 @@ class Product_page(QWidget):
             if editable and self.table_product.columnCount() > 5:
                 btn_delete = QPushButton()
                 btn_delete.setObjectName("btn_delete")
-                btn_delete.setText("Удалить")
+                btn_delete.setText("")
                 btn_delete.setContentsMargins(0, 0, 0, 0)
                 btn_delete.clicked.connect(self.table_row_delete)
                     
                 self.table_product.setCellWidget(row_idx, 5, btn_delete)
         self.table_product.setSortingEnabled(True)
+        self.table_product.resizeColumnsToContents()
 
     def on_item_changed(self, item):
         row = item.row()
@@ -180,6 +198,7 @@ class Product_page(QWidget):
         new_value = item.text()
         id_value = self.table_product.item(row, 0).text()
         self.database.update_column_by_id(product_id=id_value, column_id=col, new_value=new_value)
+        
     def table_row_delete(self):
         button = self.sender()
         if button:
