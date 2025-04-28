@@ -9,57 +9,54 @@ class SalesWindow(QWidget):
     def __init__(self, database):
         super().__init__()
         self.database = database
-
-        self.setWindowTitle("Продажа товара")
         self.setMinimumSize(800, 500)
-
         self.selected_products = {}
-
         self.__create_objects()
-        self.__setup_layout()
+        self.__add_object_name()
+        self.__add_to_page()
         self.__setup_connections()
-
+        self.__set_styleSheet()
         self.load_products()
-        with open("main/sales/ui/style.qss", "r") as file:
-            self.setStyleSheet(file.read())
+        
 
     def __create_objects(self):
         self.layout = QVBoxLayout()
         self.search_layout = QHBoxLayout()
         self.title_label = QLabel("Продажи")
-        self.title_label.setObjectName("label_products")  # чтобы применился твой стиль
-        self.title_label.setAlignment(Qt.AlignCenter) 
         self.search_line = QLineEdit()
-        self.search_line.setObjectName("editline_search")
-
         self.search_button = QPushButton("Поиск")
-        self.search_button.setObjectName("btn_search")
-
         self.update_button = QPushButton("Обновить таблицу")
-        self.update_button.setObjectName("btn_update")
-
         self.sell_button = QPushButton("Перейти к продаже")
-        self.sell_button.setObjectName("btn_add")
-
         self.table = QTableWidget()
-        self.table.setObjectName("table_product")
         self.table.setColumnCount(6)
         self.table.setHorizontalHeaderLabels(["ID", "Название", "Производитель", "Срок годности", "Количество", "Добавить"])
+        
+
+    def __add_object_name(self):
+        self.title_label.setObjectName("title_label")
+        self.search_line.setObjectName("search_line")
+        self.search_button.setObjectName("search_button")
+        self.update_button.setObjectName("update_button")
+        self.sell_button.setObjectName("sell_button")
+        self.table.setObjectName("table")
+
+    def __set_styleSheet(self):
+        with open("main/sales/ui/style_SalesWindow.qss", "r") as file:
+            self.setStyleSheet(file.read())
+        self.title_label.setAlignment(Qt.AlignCenter) 
         self.table.setSelectionMode(QTableWidget.NoSelection)
         self.table.horizontalHeader().setStretchLastSection(True)
-        
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
-    def __setup_layout(self):
         self.search_line.setPlaceholderText("Введите название товара")
+        self.table.setSortingEnabled(True)
+
+    def __add_to_page(self):
         self.layout.addWidget(self.title_label)
-        
         self.search_layout.addWidget(self.search_line)
         self.search_layout.addWidget(self.search_button)
         self.search_layout.addWidget(self.update_button)
         self.search_layout.addWidget(self.sell_button)
         self.layout.addLayout(self.search_layout)
-
         self.layout.addWidget(self.table)
         self.setLayout(self.layout)
 
@@ -101,7 +98,7 @@ class SalesWindow(QWidget):
             self.table.setItem(row_number, column_number, item)
 
         add_button = QPushButton()
-        add_button.setObjectName("btn_add")
+        
         add_button.clicked.connect(lambda checked, data=row_data: self.add_product(data))
         self.table.setCellWidget(row_number, 5, add_button)
 
@@ -134,42 +131,50 @@ class SelectedProductsDialog(QDialog):
         super().__init__()
         self.selected_products = selected_products
         self.database = database
-
         self.setWindowTitle("Продажа выбранных товаров")
-        self.setFixedSize(600, 400)
-        self.setObjectName("add_window")
-
-        self.layout = QVBoxLayout()
-
-        self.title_label = QLabel("Выбранные товары")
-        self.title_label.setObjectName("add_window_label")
-        self.layout.addWidget(self.title_label)
-
-        self.table = QTableWidget()
-        self.table.setObjectName("table_product")
+        self.__create_objects()
+        self.__add_to_page()
+        self.__add_object_name()
+        self.__set_styleSheet()
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["Название", "Производитель", "Остаток", "Количество для продажи", ""])
-        self.table.horizontalHeader().setStretchLastSection(True)
-        self.layout.addWidget(self.table)
-
-        self.sell_button = QPushButton("Подтвердить продажу")
-        self.sell_button.setObjectName("btn_add")
-        self.layout.addWidget(self.sell_button)
-
-        self.setLayout(self.layout)
-
+        self.table.setHorizontalHeaderLabels(["Название", "Производитель", "Остаток", "Количество", ""])
         self.populate_table()
         self.sell_button.clicked.connect(self.sell_products)
+
+    def __create_objects(self):
+        self.layout = QVBoxLayout()
+        self.title_label = QLabel("Выбранные товары")
+        self.table = QTableWidget()
+        self.sell_button = QPushButton("Подтвердить продажу")
+
+    def __add_to_page(self):
+        self.layout.addWidget(self.title_label)
+        self.layout.addWidget(self.table)
+        self.layout.addWidget(self.sell_button)
+        self.setLayout(self.layout)
+
+    def __add_object_name(self):
+        self.setObjectName("add_window")
+        self.title_label.setObjectName("titile_label")
+        self.table.setObjectName("table")
+        self.sell_button.setObjectName("sell_button")
+
+    def __set_styleSheet(self):
+        with open("main/sales/ui/style_SelectedProductDialog.qss", "r") as file:
+            self.setStyleSheet(file.read())
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.setMinimumSize(700, 400)
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
 
     def populate_table(self):
         self.table.setRowCount(0)
         for idx, (product_id, info) in enumerate(self.selected_products.items()):
             self.table.insertRow(idx)
-
             self.table.setItem(idx, 0, QTableWidgetItem(info["name"]))
             self.table.setItem(idx, 1, QTableWidgetItem(info["manufacturer"]))
             self.table.setItem(idx, 2, QTableWidgetItem(str(info["quantity"])))
-
             spinbox = QSpinBox()
             spinbox.setMinimum(1)
             spinbox.setMaximum(info["quantity"])
@@ -202,5 +207,5 @@ class SelectedProductsDialog(QDialog):
                     new_quantity = info["quantity"] - sell_quantity
                     self.database.update_column_by_id(product_id=product_id, column_id=4, new_value=new_quantity)
 
-        QMessageBox.information(self, "Успех", "Товары успешно проданы.")
+        QMessageBox.information(self, "Успех", "Операция выполнена!")
         self.accept()

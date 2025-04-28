@@ -13,7 +13,7 @@ QLabel#add_window_label {
 }
 
 /* Поисковая строка */
-QLineEdit#editline_search {
+QLineEdit#search_line {
     padding: 6px 10px;
     border: 1px solid #cccccc;
     border-radius: 5px;
@@ -22,11 +22,9 @@ QLineEdit#editline_search {
 }
 
 /* Кнопки */
-QPushButton#btn_search,
-QPushButton#btn_update,
-QPushButton#btn_edit,
-QPushButton#btn_add,
-QPushButton#btn_delete,
+QPushButton#search_button,
+QPushButton#update_button,
+QPushButton#sell_button,
 QPushButton {
     background-color: #333333;
     font: 9pt "Arial";
@@ -37,26 +35,22 @@ QPushButton {
     max-width: 150px;
 }
 
-QPushButton#btn_search:hover,
-QPushButton#btn_update:hover,
-QPushButton#btn_edit:hover,
-QPushButton#btn_add:hover,
-QPushButton#btn_delete:hover,
+QPushButton#search_button:hover,
+QPushButton#update_button:hover,
+QPushButton#sell_button:hover,
 QPushButton:hover {
     background-color: #34495e;
 }
 
-QPushButton#btn_search:pressed,
-QPushButton#btn_update:pressed,
-QPushButton#btn_edit:pressed,
-QPushButton#btn_add:pressed,
-QPushButton#btn_delete:pressed,
+QPushButton#search_button:pressed,
+QPushButton#update_button:pressed,
+QPushButton#sell_button:pressed,
 QPushButton:pressed {
     background-color: #1abc9c;
 }
 
 /* Таблицы */
-QTableWidget#table_product {
+QTableWidget#table {
     background-color: #ffffff;
     border: 1px solid #cccccc;
     border-radius: 5px;
@@ -109,7 +103,7 @@ QScrollBar::add-line:vertical {
 QWidget#add_window {
     background-color: #f9f9f9;
 }
-QLabel#label_products {
+QLabel#title_label {
     font-size: 24px;
     background-color: rgb(222, 222, 222);
     font-weight: bold;

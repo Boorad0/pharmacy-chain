@@ -1,0 +1,104 @@
+/* Окно выбранных товаров */
+QDialog#add_window {
+    background-color: #f9f9f9;
+    font-family: "Arial";
+    font-size: 14px;
+    color: #333333;
+}
+
+/* Заголовок окна */
+QLabel#titile_label {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333333;
+    margin: 10px auto 15px auto;
+}
+
+/* Таблица выбранных товаров */
+QTableWidget#table {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    selection-color: black;
+    font-family: "Arial";
+    font-size: 13px;
+}
+
+QHeaderView::section {
+    background-color: #333333;
+    color: white;
+    padding: 5px;
+    border: none;
+    font-weight: bold;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #333333;
+    border: none;
+}
+
+/* Кнопка подтверждения продажи */
+QPushButton#sell_button {
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 20px;
+    font: 10pt "Arial";
+    border: none;
+    border-radius: 5px;
+    max-width: 200px;
+    margin: 15px auto 5px auto;
+}
+
+QPushButton#sell_button:hover {
+    background-color: #2ecc71;
+}
+
+QPushButton#sell_button:pressed {
+    background-color: #1e8449;
+}
+
+/* Кнопка удаления товара */
+QPushButton#btn_delete {
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+QPushButton#btn_delete:hover {
+    background-color: #e74c3c;
+}
+
+QPushButton#btn_delete:pressed {
+    background-color: #a93226;
+}
+
+/* Скроллбар */
+QScrollBar:vertical {
+    background: #f0f0f0;
+    width: 18px;
+    margin: 4px 4px 4px 4px;
+    border: none;
+}
+
+QScrollBar::handle:vertical {
+    background: #333333;
+    min-height: 20px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #555555;
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #222222;
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical {
+    height: 0px;
+    border: none;
+    background: none;
+}
