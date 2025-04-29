@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget
 from main.products.product_page import Product_page
 from main.sales.sales_page import SalesWindow
+from main.reports.reports_page import ReportsWindow
 class MainWindow(QWidget):
     def __init__(self, stacked_widget, database):
         super().__init__()
@@ -42,6 +43,7 @@ class MainWindow(QWidget):
         self.stack.addWidget(self.clear_page)
         self.stack.addWidget(self.product_page)
         self.stack.addWidget(self.sales_page)
+        self.stack.addWidget(self.report_page)
         self.main_layout.addWidget(self.stack)
 
     def __create_objects(self):
@@ -58,6 +60,7 @@ class MainWindow(QWidget):
         self.clear_page=QWidget()
         self.product_page = Product_page(self.database)
         self.sales_page = SalesWindow(self.database)
+        self.report_page = ReportsWindow(self.database)
 
     def __add_object_name(self):
         self.menu_widget.setObjectName("menu_widget")
@@ -87,6 +90,8 @@ class MainWindow(QWidget):
             self.stack.setCurrentIndex(1)
         if button.text() == "Продажи":
             self.stack.setCurrentIndex(2)
+        if button.text() == "Отчеты":
+            self.stack.setCurrentIndex(3)
             
         
     def button_exit(self):

@@ -121,10 +121,11 @@ class SalesWindow(QWidget):
             return
 
         dialog = SelectedProductsDialog(self.selected_products, self.database)
-        dialog.exec_()
-
-        self.selected_products.clear()
-        self.load_products()
+        if dialog.exec_():
+            # Получаем обновлённые количества из диалога
+            self.selected_products = dialog.get_updated_products()
+            self.selected_products.clear()
+            self.load_products()
 
 class SelectedProductsDialog(QDialog):
     def __init__(self, selected_products, database):
@@ -167,7 +168,11 @@ class SelectedProductsDialog(QDialog):
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-
+    def get_updated_products(self):
+        for row, product_id in enumerate(self.selected_products):
+            spinbox = self.table.cellWidget(row, 3)
+            self.selected_products[product_id]["sell_quantity"] = spinbox.value()
+        return self.selected_products
     def populate_table(self):
         self.table.setRowCount(0)
         for idx, (product_id, info) in enumerate(self.selected_products.items()):
@@ -183,7 +188,8 @@ class SelectedProductsDialog(QDialog):
 
             remove_button = QPushButton("Удалить")
             remove_button.setObjectName("btn_delete")
-            remove_button.clicked.connect(lambda checked, row=idx: self.remove_row(row))
+            remove_button.clicked.connect(lambda checked, row_idx=idx: self.remove_row(row_idx))
+
             self.table.setCellWidget(idx, 4, remove_button)
 
     def remove_row(self, row):
@@ -199,13 +205,23 @@ class SelectedProductsDialog(QDialog):
 
     def sell_products(self):
         for row in range(self.table.rowCount()):
-            name = self.table.item(row, 0).text()
-            for product_id, info in self.selected_products.items():
-                if info["name"] == name:
-                    spinbox = self.table.cellWidget(row, 3)
-                    sell_quantity = spinbox.value()
-                    new_quantity = info["quantity"] - sell_quantity
-                    self.database.update_column_by_id(product_id=product_id, column_id=4, new_value=new_quantity)
+            product_id = list(self.selected_products.keys())[row]
+            info = self.selected_products[product_id]
+
+            spinbox = self.table.cellWidget(row, 3)
+            sell_quantity = spinbox.value()
+
+            if sell_quantity > info["quantity"]:
+                QMessageBox.warning(self, "Ошибка", f"Недостаточно товара '{info['name']}' для продажи.")
+                return
+
+            new_quantity = info["quantity"] - sell_quantity
+
+            # 1. Обновляем количество в таблице product_table
+            self.database.update_column_by_id(product_id=product_id, column_id=4, new_value=new_quantity)
+
+            # 2. Записываем продажу в таблицу reports
+            self.database.log_sale_to_reports(product_id=product_id, sold_quantity=sell_quantity)
 
         QMessageBox.information(self, "Успех", "Операция выполнена!")
         self.accept()

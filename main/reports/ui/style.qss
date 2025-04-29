@@ -1,0 +1,88 @@
+QWidget {
+    background-color: #f0f0f0;
+    font-family: "Arial";
+    font-size: 14px;
+    color: #333333;
+}
+
+/* Заголовок окна отчётов */
+QLabel#title_label {
+    font-size: 24px;
+    background-color: rgb(222, 222, 222);
+    font-weight: bold;
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    qproperty-alignment: AlignCenter;
+}
+
+/* Кнопка обновления */
+QPushButton#refresh_button {
+    background-color: #333333;
+    font: 9pt "Arial";
+    color: rgb(255, 255, 255);
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    max-width: 150px;
+    margin-left: 0;
+    
+}
+
+QPushButton#refresh_button:hover {
+    background-color: #34495e;
+}
+
+QPushButton#refresh_button:pressed {
+    background-color: #1abc9c;
+}
+
+/* Таблица отчётов */
+QTableWidget#table {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    selection-color: black;
+    font-family: "Arial";
+}
+
+QHeaderView::section {
+    background-color: #333333;
+    color: white;
+    padding: 5px;
+    border: none;
+}
+
+QTableWidget QTableCornerButton::section {
+    background-color: #333333;
+    border: none;
+}
+
+/* Скроллбар */
+QScrollBar:vertical {
+    background: #f0f0f0;
+    width: 18px;
+    margin: 4px;
+    border: none;
+}
+
+QScrollBar::handle:vertical {
+    background: #333333;
+    min-height: 20px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #555555;
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #222222;
+}
+
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical {
+    height: 0px;
+    border: none;
+    background: none;
+}

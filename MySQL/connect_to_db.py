@@ -1,6 +1,6 @@
 from getpass import getpass
 from mysql.connector import connect, Error
-from datetime import date
+from datetime import datetime
 class BD:
     def __init__(self,login=None,password=None):
         self.column_names = ["id", "name", "manufacturer", "expiration_date", "quantity"]
@@ -114,8 +114,6 @@ class BD:
         """
         try:
             self.cursor.execute("USE pharmacy_chain")
-
-            # Проверка, существует ли товар с таким ID
             self.cursor.execute("SELECT * FROM product_table WHERE id = %s", (product_id,))
             row = self.cursor.fetchone()
             self.cursor.execute("DELETE FROM product_table WHERE id = %s", (product_id,))
@@ -123,3 +121,50 @@ class BD:
             
         except Error as e:
             print(f"Ошибка при удалении: {e}")
+    def log_sale_to_reports(self, product_id, sold_quantity):
+        """
+        Добавляет запись о продаже в таблицу reports.
+        :param product_id: ID проданного товара
+        :param sold_quantity: Количество проданных единиц
+        """
+        try:
+            self.cursor.execute("USE pharmacy_chain")
+
+            # Получаем информацию о товаре по ID
+            self.cursor.execute("SELECT name, manufacturer, expiration_date, quantity FROM product_table WHERE id = %s", (product_id,))
+            result = self.cursor.fetchone()
+
+            if not result:
+                print(f"Товар с ID {product_id} не найден.")
+                return False
+
+            name, manufacturer, expiration_date, current_quantity = result
+
+            # ➕ Проверка: не добавлять в отчёт, если товара изначально нет
+            if current_quantity == 0:
+                print(f"Товар '{name}' (ID {product_id}) отсутствует на складе — не добавлен в отчёт.")
+                return False
+
+            sale_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            insert_query = """
+            INSERT INTO reports (name, manufacturer, expiration_date, quantity, sale_date, sold_quantity)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            self.cursor.execute(insert_query, (
+                name,
+                manufacturer,
+                expiration_date,
+                current_quantity,
+                sale_date,
+                sold_quantity
+            ))
+            self.DataBase.commit()
+
+            # ➕ Выводим подтверждение в консоль
+            print(f"Продажа товара '{name}' (ID {product_id}) успешно добавлена в отчёт.")
+            return True
+
+        except Error as e:
+            print(f"Ошибка при добавлении в отчет: {e}")
+            return False
