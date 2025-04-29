@@ -14,13 +14,13 @@ class ReportsWindow(QWidget):
         self.__create_objects()
         self.__add_object_name()
 
-        self.__setup_layout()
-        self.__setup_style()
-        self.__connect_signals()
+        self.__add_to_page()
+        self.__load_buttons()
         self.__set_styleSheet()
         self.load_reports()
 
     def __create_objects(self):
+        self.layout = QVBoxLayout()
         self.title_label = QLabel("Отчёты")
         self.refresh_button = QPushButton("Обновить")
         self.table = QTableWidget()
@@ -29,28 +29,28 @@ class ReportsWindow(QWidget):
             "Название", "Производитель", "Срок годности",
             "Количество на момент продажи", "Дата продажи", "Продано"
         ])
+        
     def __set_styleSheet(self):
         with open("main/reports/ui/style.qss", "r") as file:
             self.setStyleSheet(file.read())
         self.table.verticalHeader().setVisible(False)
         self.table.setSortingEnabled(True)
-    def __add_object_name(self):
-        self.title_label.setObjectName("title_label")
-        self.refresh_button.setObjectName("refresh_button")
-        self.table.setObjectName("table")
-    def __setup_layout(self):
-        layout = QVBoxLayout()
-        layout.addWidget(self.title_label)
-        layout.addWidget(self.refresh_button)
-        layout.addWidget(self.table)
-        self.setLayout(layout)
-
-    def __setup_style(self):
         self.title_label.setAlignment(Qt.AlignCenter)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    def __connect_signals(self):
+    def __add_object_name(self):
+        self.title_label.setObjectName("title_label")
+        self.refresh_button.setObjectName("refresh_button")
+        self.table.setObjectName("table")
+
+    def __add_to_page(self):
+        self.layout.addWidget(self.title_label)
+        self.layout.addWidget(self.refresh_button)
+        self.layout.addWidget(self.table)
+        self.setLayout(self.layout)
+
+    def __load_buttons(self):
         self.refresh_button.clicked.connect(self.load_reports)
 
     def load_reports(self):
