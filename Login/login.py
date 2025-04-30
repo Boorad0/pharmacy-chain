@@ -1,10 +1,13 @@
 
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMainWindow,QWidget,QLineEdit
 from Login.ui.style import Style
 class AppLogin(QMainWindow):
+    login_signal = pyqtSignal()
     def __init__(self,stacked_widget,database):
         super(AppLogin,self).__init__()
+        
         self.database = database
         self.stacked_widget = stacked_widget
         self.__create_objects()
@@ -44,14 +47,18 @@ class AppLogin(QMainWindow):
     
     def authorization(self):
         self.login_btn.clicked.connect(self.login)
+        
 
     def login(self):
         username = self.login_place.text()
         password = self.password_place.text()
-        self.database.login = username
+        role = self.database.check_user_credentials(username, password)
+        
+        """self.database.login = username
         self.database.password = password
-        self.database.authorization()
-        if self.database.status:
+        self.database.authorization()"""
+        if role != None:
+            self.login_signal.emit()
             self.password_place.clear()
             self.label_wrong_data.setText("")  
             self.stacked_widget.resize(1440, 810)

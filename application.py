@@ -1,4 +1,4 @@
-
+from PyQt5.QtCore import pyqtSignal
 import sys
 from PyQt5 import QtCore,QtWidgets
 from PyQt5.QtWidgets import QApplication, QStackedWidget,QWidget
@@ -10,16 +10,15 @@ from MySQL.connect_to_db import BD
 class App(QApplication):
     def __init__(self, sys_argv):
         super().__init__(sys_argv)
-        database= BD()
+        self.database= BD()
+
         self.stacked_widget = QStackedWidget()
-        self.auth_window = AppLogin(self.stacked_widget, database)
-        self.main_window = MainWindow(self.stacked_widget, database)
+        self.auth_window = AppLogin(self.stacked_widget, self.database)
+        self.main_window = None
 
         self.stacked_widget.addWidget(self.auth_window)
-        self.stacked_widget.addWidget(self.main_window)
+        
         self.stacked_widget.setCurrentIndex(0)
-
-        # --- создаем реальное окно
         self.main_widget = QWidget()
         
         self.main_layout = QtWidgets.QVBoxLayout(self.main_widget)
@@ -29,8 +28,35 @@ class App(QApplication):
         self.main_widget.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.WindowMinMaxButtonsHint | QtCore.Qt.WindowCloseButtonHint)
         self.main_widget.setWindowTitle("Аптека")
         self.main_widget.resize(960, 540)
+        
+        self.auth_window.login_signal.connect(self.create_main_window)
         self.main_widget.show()
         
+    def create_main_window(self):
+        if self.main_window:
+            self.stacked_widget.removeWidget(self.main_window)
+            self.main_window.deleteLater()
+            self.main_window = None
+
+        self.main_window = MainWindow(self.stacked_widget, self.database)
+        self.main_window.logout_signal.connect(self.handle_logout)
+
+        self.stacked_widget.addWidget(self.main_window)
+        self.stacked_widget.setCurrentWidget(self.main_window)
+        self.stacked_widget.setMinimumSize(1440, 810)
+        self.stacked_widget.setMaximumSize(1920, 1080)
+
+    def handle_logout(self):
+        # Удаляем текущее main window и возвращаемся к логину
+        if self.main_window:
+            self.stacked_widget.removeWidget(self.main_window)
+            self.main_window.deleteLater()
+            self.main_window = None
+
+        self.stacked_widget.setCurrentWidget(self.auth_window)
+        self.stacked_widget.setMinimumSize(280, 385)
+        self.stacked_widget.setMaximumSize(960, 540)
+        self.stacked_widget.resize(960, 540)
 
        
     

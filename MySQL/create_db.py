@@ -51,8 +51,52 @@ class CreateDB:
                 print("Ошибка при создании таблицы 'reports':", e)
         else:
             print("Курсор не инициализирован — соединение не установлено.")
+    def create_users_table(self):
+        """
+        Создаёт таблицу `users` в базе данных `pharmacy_chain`, если она не существует.
+        """
+        try:
+            self.cursor.execute("USE pharmacy_chain")
+            create_table_query = """
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL,
+                role VARCHAR(50) NOT NULL
+            );
+            """
+            self.cursor.execute(create_table_query)
+            self.connection.commit()
+            print("Таблица `users` успешно создана или уже существует.")
+        except Error as e:
+            print(f"Ошибка при создании таблицы users: {e}")
+    def add_user(self, username, password, role):
+        """
+        Добавляет нового пользователя в таблицу users.
+        :param username: имя пользователя (уникальное)
+        :param password: пароль (будет захеширован SHA-256)
+        :param role: роль пользователя (например, 'admin', 'manager', 'user')
+        """
+        try:
+            self.cursor.execute("USE pharmacy_chain")
 
+            # Хешируем пароль
+            
+
+            insert_query = """
+            INSERT INTO users (username, password, role)
+            VALUES (%s, %s, %s)
+            """
+            self.cursor.execute(insert_query, (username, password, role))
+            self.connection.commit()
+            print(f"Пользователь '{username}' успешно добавлен.")
+            return True
+        except Error as e:
+            print(f"Ошибка при добавлении пользователя: {e}")
+            return False
 # Использование
+
 database = CreateDB()
 database.show_db()
-database.create_reports_table()
+database.add_user("user", "12345678", "user")
+

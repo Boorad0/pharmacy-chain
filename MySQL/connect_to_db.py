@@ -4,27 +4,104 @@ from datetime import datetime
 class BD:
     def __init__(self,login=None,password=None):
         self.column_names = ["id", "name", "manufacturer", "expiration_date", "quantity"]
-        self.status = False
-        self.login = login
-        self.password = password
+        
         
         
     def authorization(self):
         try:
             DataBase=  connect(
             host="localhost",
-            user="boorado",#self.login=
-            password="12345678",#self.password=
+            user="boorado",
+            password="12345678",
             database="pharmacy_chain",
             auth_plugin='mysql_native_password'
             )
             self.DataBase = DataBase
             self.cursor = self.DataBase.cursor()
             
-            self.status = True
+            return True
         except Error as e:
-            self.status = False
+            return False
     
+
+    def add_user(self, username, password, role):
+        """
+        Добавляет нового пользователя в таблицу users.
+        :param username: имя пользователя (уникальное)
+        :param password: пароль (будет захеширован SHA-256)
+        :param role: роль пользователя (например, 'admin', 'manager', 'user')
+        """
+        try:
+            self.cursor.execute("USE pharmacy_chain")
+
+            # Хешируем пароль
+            
+
+            insert_query = """
+            INSERT INTO users (username, password, role)
+            VALUES (%s, %s, %s)
+            """
+            self.cursor.execute(insert_query, (username, password, role))
+            self.DataBase.commit()
+            print(f"Пользователь '{username}' успешно добавлен.")
+            return True
+        except Error as e:
+            print(f"Ошибка при добавлении пользователя: {e}")
+            return False
+    def get_all_users(self):
+        if not self.authorization():
+            return None
+        try:
+            self.cursor.execute("USE pharmacy_chain")
+            self.cursor.execute("SELECT id, username, role FROM users")
+            return self.cursor.fetchall()
+        except Error as e:
+            print(f"Ошибка при получении списка пользователей: {e}")
+            return []
+    def delete_user_by_id(self, user_id):
+        if not self.authorization():
+            return None
+        try:
+            self.cursor.execute("USE pharmacy_chain")
+            self.cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+            self.DataBase.commit()
+            print(f"Пользователь с ID {user_id} удалён.")
+            return True
+        except Error as e:
+            print(f"Ошибка при удалении пользователя: {e}")
+            return False
+    def check_user_credentials(self, username, password):
+        
+        """
+        Проверяет логин и пароль пользователя.
+        :param username: логин
+        :param password: пароль в чистом виде
+        :return: роль пользователя (str), если аутентификация успешна; иначе None
+        """
+        
+        if not self.authorization():
+            return None
+        try:
+            self.cursor.execute("USE pharmacy_chain")
+
+            # Хешируем введённый пароль
+            
+
+            # Ищем пользователя с таким логином и паролем
+            query = "SELECT role FROM users WHERE username = %s AND password = %s"
+            self.cursor.execute(query, (username, password))
+            result = self.cursor.fetchone()
+
+            if result:
+                self.role = result[0]
+                self.username = username
+                return result[0]  # возвращаем роль пользователя
+            else:
+                return None
+
+        except Error as e:
+            print(f"Ошибка при проверке логина и пароля: {e}")
+            return None
     def return_row(self):
         self.authorization()
         

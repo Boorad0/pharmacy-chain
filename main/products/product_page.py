@@ -12,6 +12,7 @@ class Product_page(QWidget):
         self.__create_objects()
         self.__add_object_text()
         self.__add_object_name()
+        self.__set_privilege()
         self.__load_btns()
         self.__add_to_page()
         self.__set_styleSheet()
@@ -39,7 +40,9 @@ class Product_page(QWidget):
         self.table_product = QTableWidget()
         self.add_window_button = QPushButton()
         self.add_window_error_label = QLabel()
-
+    def __set_privilege(self):
+        if self.database.role != "admin":
+            self.btn_edit.hide()
     def __add_object_name(self):
         self.btn_add.setObjectName("btn_add")
         self.btn_edit.setObjectName("btn_edit")

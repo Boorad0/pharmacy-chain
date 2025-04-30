@@ -1,11 +1,14 @@
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget
 from main.products.product_page import Product_page
 from main.sales.sales_page import SalesWindow
 from main.reports.reports_page import ReportsWindow
+from main.admin.AdminWindow import AdminWindow
 class MainWindow(QWidget):
+    logout_signal =pyqtSignal()
     def __init__(self, stacked_widget, database):
         super().__init__()
         self.stacked_widget = stacked_widget
@@ -29,14 +32,19 @@ class MainWindow(QWidget):
         self.menu_layout.addStretch()
         self.product_page.setContentsMargins(0,0,0,0)
         self.stack.setContentsMargins(0,0,0,0)
-
+    
+    def __set_privilege(self):
+        if self.database.role == "admin":
+            self.initialization(["Товары", "Поставки", "Продажи","Поставщики","Сотрудники","Отчеты","Администрирование"])
+        else:
+            self.initialization(["Товары", "Поставки", "Продажи","Поставщики"])
     def __add_to_page(self):
         self.menu_widget.setLayout(self.menu_layout)
         self.menu_layout.addWidget(self.label_photo)
         self.menu_layout.addWidget(self.label_username)
         self.menu_layout.addWidget(self.label_line_1)
         self.menu_layout.addWidget(self.label_menu)
-        self.initialization(["Товары", "Поставки", "Продажи","Поставщики","Сотрудники","Отчеты","Администрирование"])
+        self.__set_privilege()
         self.menu_layout.addWidget(self.label_line_2)
         self.initialization(["Выход"])
         self.main_layout.addWidget(self.menu_widget)
@@ -44,9 +52,11 @@ class MainWindow(QWidget):
         self.stack.addWidget(self.product_page)
         self.stack.addWidget(self.sales_page)
         self.stack.addWidget(self.report_page)
+        self.stack.addWidget(self.admin_page)
         self.main_layout.addWidget(self.stack)
 
     def __create_objects(self):
+        
         self.main_layout = QHBoxLayout(self)
         self.menu_layout = QVBoxLayout()
         self.menu_widget = QWidget()
@@ -61,6 +71,7 @@ class MainWindow(QWidget):
         self.product_page = Product_page(self.database)
         self.sales_page = SalesWindow(self.database)
         self.report_page = ReportsWindow(self.database)
+        self.admin_page = AdminWindow(self.database)
 
     def __add_object_name(self):
         self.menu_widget.setObjectName("menu_widget")
@@ -71,7 +82,7 @@ class MainWindow(QWidget):
         self.label_menu.setObjectName("label_menu")
 
     def __add_object_text(self):
-        self.label_username.setText("Даниил")
+        self.label_username.setText(self.database.username)
         self.label_menu.setText("Меню")
 
     def initialization(self, btns):
@@ -92,12 +103,11 @@ class MainWindow(QWidget):
             self.stack.setCurrentIndex(2)
         if button.text() == "Отчеты":
             self.stack.setCurrentIndex(3)
+        if button.text() == "Администрирование":
+            self.stack.setCurrentIndex(4)
             
         
     def button_exit(self):
-        self.stacked_widget.setMinimumSize(QtCore.QSize(280,385))
-        self.stacked_widget.setMaximumSize(QtCore.QSize(960, 540))
-        self.stacked_widget.resize(960,540)
-        self.stacked_widget.setCurrentIndex(0)
-        self.product_page.add_window.hide()
+        self.logout_signal.emit()
+        
         
