@@ -96,7 +96,13 @@ class AdminWindow(QWidget):
 
             delete_button = QPushButton()
             delete_button.clicked.connect(lambda _, uid=user[0]: self.delete_user(uid))
-            self.table.setCellWidget(row_index, 3, delete_button)
+            button_widget = QWidget()
+            button_layout = QHBoxLayout(button_widget)
+            button_layout.addWidget(delete_button)
+            button_layout.setAlignment(Qt.AlignCenter)
+            button_layout.setContentsMargins(0, 0, 0, 0)
+
+            self.table.setCellWidget(row_index, 3, button_widget)
 
     def delete_user(self, user_id):
         confirm = QMessageBox.question(self, "Подтвердите", f"Удалить пользователя ID {user_id}?", QMessageBox.Yes | QMessageBox.No)
@@ -105,6 +111,6 @@ class AdminWindow(QWidget):
             self.load_users()
 
     def show_add_user_dialog(self):
-        dialog = AddUserDialog(self.database)
-        if dialog.exec_():
+        self.dialog = AddUserDialog(self.database)
+        if self.dialog.exec_():
             self.load_users()

@@ -7,9 +7,9 @@ from main.mainWindow import MainWindow
 from MySQL.connect_to_db import BD
 
 
-class App(QApplication):
-    def __init__(self, sys_argv):
-        super().__init__(sys_argv)
+class App:
+    def __init__(self):
+        
         self.database= BD()
 
         self.stacked_widget = QStackedWidget()
@@ -30,8 +30,10 @@ class App(QApplication):
         self.main_widget.resize(960, 540)
         
         self.auth_window.login_signal.connect(self.create_main_window)
-        self.main_widget.show()
-        
+        if not self.is_test_mode():
+            self.main_widget.show()  # Показываем окно только если не в тестовом режиме
+    def is_test_mode(self):
+        return hasattr(self, 'is_test') and self.is_test
     def create_main_window(self):
         if self.main_window:
             self.stacked_widget.removeWidget(self.main_window)
@@ -55,11 +57,13 @@ class App(QApplication):
 
         self.stacked_widget.setCurrentWidget(self.auth_window)
         self.stacked_widget.setMinimumSize(280, 385)
-        self.stacked_widget.setMaximumSize(960, 540)
+        
         self.stacked_widget.resize(960, 540)
 
        
     
 if __name__ == "__main__":
-    app = App(sys.argv) 
-    sys.exit(app.exec_())     
+    qt_app = QtWidgets.QApplication(sys.argv)
+    app = App()
+    app.main_widget.show()
+    sys.exit(qt_app.exec_())

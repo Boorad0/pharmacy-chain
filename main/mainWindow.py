@@ -35,9 +35,9 @@ class MainWindow(QWidget):
     
     def __set_privilege(self):
         if self.database.role == "admin":
-            self.initialization(["Товары", "Поставки", "Продажи","Поставщики","Сотрудники","Отчеты","Администрирование"])
+            self.initialization(["Товары", "Продажи","Отчеты","Администрирование"])
         else:
-            self.initialization(["Товары", "Поставки", "Продажи","Поставщики"])
+            self.initialization(["Товары", "Продажи","Отчеты"])
     def __add_to_page(self):
         self.menu_widget.setLayout(self.menu_layout)
         self.menu_layout.addWidget(self.label_photo)
@@ -91,7 +91,16 @@ class MainWindow(QWidget):
             button.setText(btn)
             button.clicked.connect(self.button_clicked)  # Подключение сигнала нажатия кнопки
             self.menu_layout.addWidget(button)
-            
+            if btn == "Выход":
+                self.logout_btn = button
+            elif btn == "Товары":
+                self.product_btn = button
+            elif btn == "Продажи":
+                self.sales_btn = button
+            elif btn == "Отчеты":
+                self.reports_btn = button
+            elif btn == "Администрирование":
+                self.admin_btn = button
     def button_clicked(self):
         button = self.sender()  # Получаем кнопку, которая вызвала сигнал
         

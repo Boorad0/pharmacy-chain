@@ -8,12 +8,8 @@ class ReportsWindow(QWidget):
     def __init__(self, database):
         super().__init__()
         self.database = database
-        self.setWindowTitle("Отчёты")
-        self.setMinimumSize(900, 500)
-
         self.__create_objects()
         self.__add_object_name()
-
         self.__add_to_page()
         self.__load_buttons()
         self.__set_styleSheet()

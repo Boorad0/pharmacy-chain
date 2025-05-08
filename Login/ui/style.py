@@ -4,10 +4,9 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 class Style(QMainWindow):
     def __init__(self):
         super().__init__()
-        
 
     def label_set(self):
-        self.label.setGeometry(QtCore.QRect(0, 0, 280, 540))
+        self.label.setGeometry(QtCore.QRect(0, 0, 280, 1080))
         self.label.setStyleSheet("\n"
 "background-color: rgb(255, 255, 255);")
         self.label.setText("")
