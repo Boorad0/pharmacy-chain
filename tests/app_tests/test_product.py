@@ -1,9 +1,6 @@
-from PyQt5.QtCore import Qt
 from tests.module.authorization import Authorization
-import time
-from PyQt5.QtWidgets import QTableWidgetItem
-from PyQt5.QtCore import Qt
 from tests.module.product_page import ProductPage
+
 def test_add_new_product(app, qtbot):
     auth = Authorization(qtbot, app)
     auth.correct_login("boorado", "12345678")

@@ -1,7 +1,5 @@
 from PyQt5.QtCore import Qt
 from tests.module.authorization import Authorization
-import time
-from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtCore import Qt
 
 def test_correct_login(app, qtbot):

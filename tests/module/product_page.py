@@ -6,6 +6,7 @@ class ProductPage:
         self.app = app
         self.product_page = self.app.main_window.product_page
         self.table = self.product_page.table_product
+        
     def add_new_product(self):
         self.qtbot.mouseClick(self.product_page.btn_add, Qt.LeftButton)
         self.product_page.add_window.isVisible()
@@ -28,11 +29,11 @@ class ProductPage:
         for row in range(self.table.rowCount()):
             item = self.table.item(row, 1)
             if item and item.text() == old_name:
-                self.table.setItem(row, 1, QTableWidgetItem(new_name))  # Установка нового значения
+                self.table.setItem(row, 1, QTableWidgetItem(new_name)) 
                 self.qtbot.wait(200)
 
                 self.product_page.load_data_from_db(editable=False)
                 updated_item = self.product_page.table_product.item(row, 1)
                 return updated_item.text() == new_name
 
-        return False  # Если не найден
+        return False  

@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayo
 from main.products.product_page import Product_page
 from main.sales.sales_page import SalesWindow
 from main.reports.reports_page import ReportsWindow
-from main.admin.AdminWindow import AdminWindow
+from main.admin.admin_page import AdminWindow
 class MainWindow(QWidget):
     logout_signal =pyqtSignal()
     def __init__(self, stacked_widget, database):
@@ -65,7 +65,7 @@ class MainWindow(QWidget):
         self.label_line_1 = QLabel()
         self.label_line_2 = QLabel()
         self.label_menu = QLabel()
-        self.pixmap = QPixmap("photo/user-octagon-svgrepo-com.svg")
+        self.pixmap = QPixmap("main/ui/user-logo.svg")
         self.stack = QStackedWidget()
         self.clear_page=QWidget()
         self.product_page = Product_page(self.database)

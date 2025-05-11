@@ -1,8 +1,6 @@
-from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
-from PyQt5 import QtCore
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout,QLineEdit, QTableWidget,QTableWidgetItem,QHeaderView
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget,QLineEdit, QComboBox, QTableWidget,QTableWidgetItem,QHeaderView
 class Product_page(QWidget):
     def __init__(self, DateBase):
         super().__init__()

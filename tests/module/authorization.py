@@ -1,7 +1,5 @@
-# utils/authorization.py
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QPushButton
 
 class Authorization:
     def __init__(self, qtbot, app):
