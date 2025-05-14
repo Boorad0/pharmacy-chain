@@ -121,7 +121,6 @@ class Product_page(QWidget):
             self.add_window.activateWindow()
             return
         
-        
         self.add_window.resize(500, 200)
         self.add_window.setWindowTitle("Добавление товара")
         self.add_window_table.setRowCount(1)
@@ -137,13 +136,11 @@ class Product_page(QWidget):
         self.add_window.show()
 
     def table_edit(self):
-        
         if self.btn_edit.text() == "Сохранить":
             self.table_product.blockSignals(True)
             self.load_data_from_db(editable=False)
             self.add_window.hide()
             self.btn_add.hide()
-            
             self.btn_edit.setText("Редактировать")
             self.btn_update.show()
             
@@ -151,28 +148,22 @@ class Product_page(QWidget):
             self.load_data_from_db(editable=True)
             self.table_product.blockSignals(False)
             self.btn_add.show()
-            
             self.btn_edit.setText("Сохранить")
             self.btn_update.hide()
     
 
     def load_data_from_db(self, editable=False):
-        
         self.table_product.setSortingEnabled(False)
         self.table_product.setRowCount(0)
         self.table_product.setColumnCount(0)
         rows = self.database.return_row()
-
         if not rows:
             return
-
         self.table_product.setRowCount(len(rows))
         if editable:self.table_product.setColumnCount(len(rows[0])+1)
         else:self.table_product.setColumnCount(len(rows[0]))
-            
         self.table_product.setHorizontalHeaderLabels(["Id", "Наименование", "Производитель", "Срок годности", "Количество", "Удалить строку"])
         self.table_product.verticalHeader().setVisible(False)
-
         for row_idx, row in enumerate(rows):
             for col_idx in range(len(row)):
                 cell = row[col_idx]
@@ -182,14 +173,12 @@ class Product_page(QWidget):
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)
 
                 self.table_product.setItem(row_idx, col_idx, item)
-
             if editable and self.table_product.columnCount() > 5:
                 btn_delete = QPushButton()
                 btn_delete.setObjectName("btn_delete")
                 btn_delete.setText("")
                 btn_delete.setContentsMargins(0, 0, 0, 0)
                 btn_delete.clicked.connect(self.table_row_delete)
-                    
                 self.table_product.setCellWidget(row_idx, 5, btn_delete)
         self.table_product.setSortingEnabled(True)
         self.table_product.resizeColumnsToContents()

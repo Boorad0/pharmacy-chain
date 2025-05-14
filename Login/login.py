@@ -30,7 +30,6 @@ class AppLogin(QMainWindow):
     def __set_styleSheet(self):
         self.stacked_widget.setWindowTitle("Аптека")
         self.stacked_widget.setMinimumSize(280, 385)
-        
         self.centralwidget.setStyleSheet("\n"
         "background-color: rgb(49, 49, 49);")
         Style.label_set(self)
@@ -45,20 +44,16 @@ class AppLogin(QMainWindow):
     
     def authorization(self):
         self.login_btn.clicked.connect(self.login)
-        
 
     def login(self):
         username = self.login_place.text()
         password = self.password_place.text()
         role = self.database.check_user_credentials(username, password)
-        
-    
         if role != None:
             self.login_signal.emit()
             self.password_place.clear()
             self.label_wrong_data.setText("")  
             self.stacked_widget.setCurrentIndex(1) 
-           
         else:
             self.label_wrong_data.setText("Неверный логин или пароль")  
             self.password_place.clear()

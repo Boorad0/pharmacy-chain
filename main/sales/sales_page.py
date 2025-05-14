@@ -77,13 +77,10 @@ class SalesWindow(QWidget):
         search_text = self.search_line.text().strip()
         if not search_text:
             return
-
         self.table.setRowCount(0)
         rows = self.database.search_products(name=search_text)
-
         if not rows:
             return
-
         for row_data in rows:
             self._insert_row(row_data)
 
@@ -96,9 +93,7 @@ class SalesWindow(QWidget):
             if column_number in (0, 4):  # ID и Количество по центру
                 item.setTextAlignment(Qt.AlignCenter)
             self.table.setItem(row_number, column_number, item)
-
         add_button = QPushButton()
-        
         add_button.clicked.connect(lambda checked, data=row_data: self.add_product(data))
         self.table.setCellWidget(row_number, 5, add_button)
 
@@ -185,11 +180,9 @@ class SelectedProductsDialog(QDialog):
             spinbox.setMaximum(info["quantity"])
             spinbox.setValue(info["sell_quantity"])
             self.table.setCellWidget(idx, 3, spinbox)
-
             remove_button = QPushButton("Удалить")
             remove_button.setObjectName("btn_delete")
             remove_button.clicked.connect(lambda checked, row_idx=idx: self.remove_row(row_idx))
-
             self.table.setCellWidget(idx, 4, remove_button)
 
     def remove_row(self, row):
@@ -216,11 +209,7 @@ class SelectedProductsDialog(QDialog):
                 return
 
             new_quantity = info["quantity"] - sell_quantity
-
-            # 1. Обновляем количество в таблице product_table
             self.database.update_column_by_id(product_id=product_id, column_id=4, new_value=new_quantity)
-
-            # 2. Записываем продажу в таблицу reports
             self.database.log_sale_to_reports(product_id=product_id, sold_quantity=sell_quantity)
 
         QMessageBox.information(self, "Успех", "Операция выполнена!")

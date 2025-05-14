@@ -127,7 +127,6 @@ class AdminWindow(QWidget):
                 item = QTableWidgetItem(str(value))
                 item.setTextAlignment(Qt.AlignCenter)
                 self.table.setItem(row_index, col_index, item)
-
             delete_button = QPushButton()
             delete_button.clicked.connect(lambda _, uid=user[0]: self.delete_user(uid))
             button_widget = QWidget()
@@ -135,7 +134,6 @@ class AdminWindow(QWidget):
             button_layout.addWidget(delete_button)
             button_layout.setAlignment(Qt.AlignCenter)
             button_layout.setContentsMargins(0, 0, 0, 0)
-
             self.table.setCellWidget(row_index, 3, button_widget)
 
     def delete_user(self, user_id):

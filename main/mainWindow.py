@@ -13,7 +13,6 @@ class MainWindow(QWidget):
         super().__init__()
         self.stacked_widget = stacked_widget
         self.database = database
-        
         self.__create_objects()
         self.__add_object_name()
         self.__add_object_text()
@@ -56,7 +55,6 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.stack)
 
     def __create_objects(self):
-        
         self.main_layout = QHBoxLayout(self)
         self.menu_layout = QVBoxLayout()
         self.menu_widget = QWidget()

@@ -5,7 +5,7 @@ from datetime import datetime
 class BD:
     def __init__(self,login=None,password=None):
         self.column_names = ["id", "name", "manufacturer", "expiration_date", "quantity"]
-        self.config = configparser.ConfigParser()  # создаём объекта парсера
+        self.config = configparser.ConfigParser()  
         self.config.read("settings.ini")
         
         
@@ -13,22 +13,19 @@ class BD:
         try:
             DataBase=  connect(
             host="localhost",
-            user=self.config["Database"]["login"],#Логин бд
-            password=self.config["Database"]["password"],#Пароль бд
+            user=self.config["Database"]["login"],
+            password=self.config["Database"]["password"],
             database="pharmacy_chain",
             auth_plugin='mysql_native_password'
             )
             self.DataBase = DataBase
             self.cursor = self.DataBase.cursor()
-            
             return True
         except Error as e:
             return False
     
 
     def add_user(self, username, password, role):
-        
-        
         try:
             self.cursor.execute("USE pharmacy_chain")
             insert_query = """
@@ -37,13 +34,12 @@ class BD:
             """
             self.cursor.execute(insert_query, (username, password, role))
             self.DataBase.commit()
-            #print(f"Пользователь '{username}' успешно добавлен.")
             return True
         except Error as e:
             print(f"Ошибка при добавлении пользователя: {e}")
             return False
+        
     def get_all_users(self):
-
         if not self.authorization():
             return None
         try:
@@ -53,6 +49,7 @@ class BD:
         except Error as e:
             print(f"Ошибка при получении списка пользователей: {e}")
             return []
+        
     def delete_user_by_id(self, user_id):
         if not self.authorization():
             return None
@@ -60,11 +57,11 @@ class BD:
             self.cursor.execute("USE pharmacy_chain")
             self.cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
             self.DataBase.commit()
-            #print(f"Пользователь с ID {user_id} удалён.")
             return True
         except Error as e:
             print(f"Ошибка при удалении пользователя: {e}")
             return False
+        
     def check_user_credentials(self, username, password):
         if not self.authorization():
             return None
@@ -76,16 +73,15 @@ class BD:
             if result:
                 self.role = result[0]
                 self.username = username
-                return result[0]  # возвращаем роль пользователя
+                return result[0] 
             else:
                 return None
-
         except Error as e:
             print(f"Ошибка при проверке логина и пароля: {e}")
             return None
+        
     def return_row(self):
         self.authorization()
-        
         self.cursor.execute("SELECT * FROM product_table")
         rows = self.cursor.fetchall()
         return rows
@@ -94,8 +90,6 @@ class BD:
     def update_column_by_id(self, product_id, column_id, new_value):
         try:
             self.cursor.execute("USE pharmacy_chain")
-
-            # Проверка, существует ли товар с таким ID
             self.cursor.execute("SELECT * FROM product_table WHERE id = %s", (product_id,))
             self.cursor.fetchone()
             query = f"UPDATE product_table SET {self.column_names[column_id]} = %s WHERE id = %s"
@@ -104,6 +98,7 @@ class BD:
 
         except Error as e:
             print(f"Ошибка при обновлении данных: {e}")
+
     def add_product(self, name, manufacturer, expiration_date, quantity):
         try:
             self.cursor.execute("USE pharmacy_chain")
@@ -167,18 +162,13 @@ class BD:
             self.cursor.execute("USE pharmacy_chain")
             self.cursor.execute("SELECT name, manufacturer, expiration_date, quantity FROM product_table WHERE id = %s", (product_id,))
             result = self.cursor.fetchone()
-
             if not result:
-                #print(f"Товар с ID {product_id} не найден.")
                 return False
 
             name, manufacturer, expiration_date, current_quantity = result
             if current_quantity == 0:
-                #print(f"Товар '{name}' (ID {product_id}) отсутствует на складе — не добавлен в отчёт.")
                 return False
-
             sale_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
             insert_query = """
             INSERT INTO reports (name, manufacturer, expiration_date, quantity, sale_date, sold_quantity)
             VALUES (%s, %s, %s, %s, %s, %s)
@@ -192,10 +182,7 @@ class BD:
                 sold_quantity
             ))
             self.DataBase.commit()
-
-            #print(f"Продажа товара '{name}' (ID {product_id}) успешно добавлена в отчёт.")
             return True
-
         except Error as e:
             print(f"Ошибка при добавлении в отчет: {e}")
             return False
